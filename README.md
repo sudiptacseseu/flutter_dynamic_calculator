@@ -1,6 +1,6 @@
 # flutter_dynamic_calculator
 
-A new flutter package to build dynamic calculator easily.
+A new flutter package to build dynamic calculator easily with full customization ability. It'll be helpful for making a custom keyboard or a bottom sheet modal calculator.
 
 [![pub package](https://img.shields.io/pub/v/flutter_dynamic_calculator.svg)](https://pub.dartlang.org/packages/flutter_dynamic_calculator)
 
@@ -48,7 +48,7 @@ DynamicCalculator(
   onChanged: (key, value, expression) {
     /*...*/
   },
-  theme: const CalculatorThemeData(
+  theme: const CalculatorTheme(
     displayColor: Colors.black,
     displayStyle: const TextStyle(fontSize: 80, color: Colors.yellow),
   ),

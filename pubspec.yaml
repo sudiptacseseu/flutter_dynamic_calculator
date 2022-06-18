@@ -1,5 +1,5 @@
 name: flutter_dynamic_calculator
-description: A new flutter package to build dynamic calculator easily.
+description: A new flutter package to build dynamic calculator easily with full customization ability. It'll be helpful for making a custom keyboard or a bottom sheet modal calculator.
 version: 1.0.0
 homepage: https://github.com/sudiptacseseu/flutter_dynamic_calculator
 
@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.17.0
-  flutter_grid_item: ^2.0.0
+  flutter_grid_item: 1.0.1
   auto_size_text: ^3.0.0
   expressions: ^0.2.3
 

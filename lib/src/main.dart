@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dynamic_calculator/src/model/calculator_theme.dart';
-import 'package:flutter_grid_button/flutter_grid_button.dart';
+import 'package:flutter_grid_item/flutter_grid_item.dart';
 import 'package:intl/intl.dart' as intl;
 import 'controller/calculator_controller.dart';
 
@@ -96,6 +96,7 @@ class DynamicCalculatorState extends State<DynamicCalculator> {
 
   final List<String?> _nums = List.filled(10, '', growable: false);
   final _baseStyle = const TextStyle(fontSize: 18);
+
   FocusNode get _focusNode => widget.focusNode ?? FocusNode();
 
   /// This allows a value of type T or T?
@@ -317,7 +318,7 @@ class DynamicCalculatorState extends State<DynamicCalculator> {
           const SizedBox(height: 8.0),
           Expanded(
             flex: 5,
-            child: _getButtons(),
+            child: _getGridItems(),
           ),
         ]),
       ),
@@ -337,8 +338,8 @@ class DynamicCalculatorState extends State<DynamicCalculator> {
     });
   }
 
-  Widget _getButtons() {
-    return GridButton(
+  Widget _getGridItems() {
+    return GridItem(
       textStyle:
           _baseStyle.copyWith(color: Theme.of(context).textTheme.button?.color),
       borderColor: widget.theme?.borderColor ?? Theme.of(context).dividerColor,
@@ -352,7 +353,6 @@ class DynamicCalculatorState extends State<DynamicCalculator> {
             _controller.removeDigit();
             break;
           case '00':
-            // _controller.toggleSign();
             _controller.addDoubleZero(0);
             break;
           case '+':
@@ -391,11 +391,11 @@ class DynamicCalculatorState extends State<DynamicCalculator> {
           widget.onChanged!(val, _controller.value, _controller.expression);
         }
       },
-      items: _getItems(),
+      items: _getGrids(),
     );
   }
 
-  List<List<GridButtonItem>> _getItems() {
+  List<List<Grid>> _getGrids() {
     return [
       [_acLabel, '⌫', _controller.numberFormat.symbols.PERCENT, '÷'],
       [_nums[7], _nums[8], _nums[9], '×'],
@@ -418,50 +418,33 @@ class DynamicCalculatorState extends State<DynamicCalculator> {
           style = widget.theme?.commandStyle;
         }
         if (title == '÷' || title == '×' || title == '-' || title == '+') {
-          // color = widget.theme?.operatorColor ?? Theme.of(context).primaryColor;
           color = Colors.grey.shade100;
-          // style = widget.theme?.operatorStyle ??
-          //     _baseStyle.copyWith(
-          //         color: Theme.of(context).primaryTextTheme.headline6!.color);
         }
-        return GridButtonItem(
-          child: Container(
+        return Grid(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            // color: Colors.red,
-            // decoration: BoxDecoration(
-            //   color: Colors.red,
-            //   borderRadius: BorderRadius.only(
-            //       topLeft:
-            //           Radius.circular((title == '÷' || title == '=') ? 10 : 0),
-            //       topRight:
-            //           Radius.circular((title == '÷' || title == '=') ? 10 : 0),
-            //       bottomLeft:
-            //           Radius.circular((title == '+' || title == '=') ? 10 : 0),
-            //       bottomRight:
-            //           Radius.circular((title == '+' || title == '=') ? 10 : 0)),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: Colors.grey.withOpacity(0.6),
-            //     spreadRadius: 5,
-            //     blurRadius: 2,
-            //     offset: const Offset(0, 3), // changes position of shadow
-            //   ),
-            // ],
-            // ),
             child: Center(child: Text(title!)),
           ),
           title: title,
           color: color,
           textStyle: style,
-          topLeftBorderRadius: (title == '÷' || title == '=') ? 10 : 0,
-          topRightBorderRadius: (title == '÷' || title == '=') ? 10 : 0,
-          bottomLeftBorderRadius: (title == '=' || title == '+') ? 10 : 0,
-          bottomRightBorderRadius: (title == '=' || title == '+') ? 10 : 0,
-          // borderRadius:
-          //     (title == '÷' || title == '×' || title == '-' || title == '+')
-          //         ? -18
-          //         : 18,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: (title == '÷' || title == '=')
+                  ? const Radius.circular(10)
+                  : Radius.zero,
+              topRight: (title == '÷' || title == '=')
+                  ? const Radius.circular(10)
+                  : Radius.zero,
+              bottomLeft: (title == '=' || title == '+')
+                  ? const Radius.circular(10)
+                  : Radius.zero,
+              bottomRight: (title == '=' || title == '+')
+                  ? const Radius.circular(10)
+                  : Radius.zero,
+            ),
+          ),
         );
       }).toList();
     }).toList();
@@ -529,11 +512,6 @@ class _CalcDisplayState extends State<_CalcDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    final borderSide = Divider.createBorderSide(
-      context,
-      color: widget.theme?.borderColor ?? Theme.of(context).dividerColor,
-      width: widget.theme?.borderWidth ?? 1.0,
-    );
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
